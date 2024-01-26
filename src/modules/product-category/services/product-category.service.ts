@@ -17,4 +17,8 @@ export class ProductCategoryService {
   ): Promise<ProductCategoryEntity> {
     return await this.repository.save(productCategoryData);
   }
+
+  async readAll(): Promise<ProductCategoryEntity[]> {
+    return await this.repository.find();
+  }
 }

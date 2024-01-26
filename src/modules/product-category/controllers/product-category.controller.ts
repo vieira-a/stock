@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 
 import { CreateProductCategoryDto } from '../dtos';
 import { ProductCategoryService } from '../services';
@@ -11,5 +11,11 @@ export class ProductCategoryController {
   async create(@Body() productCategoryData: CreateProductCategoryDto) {
     await this.service.create(productCategoryData);
     return 'Categoria de produto registrada com sucesso';
+  }
+
+  @Get()
+  @HttpCode(200)
+  async readAll() {
+    return await this.service.readAll();
   }
 }
