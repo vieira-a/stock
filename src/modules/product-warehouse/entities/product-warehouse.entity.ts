@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { ProductBalanceEntity } from '../../../modules/product-balance/entities/product-balance.entity';
 
 @Entity('product_warehouses')
 export class ProductWarehouseEntity {
@@ -14,6 +17,9 @@ export class ProductWarehouseEntity {
 
   @Column({ name: 'description', nullable: false })
   description: string;
+
+  @OneToMany(() => ProductBalanceEntity, (balance) => balance.warehouse)
+  balances: ProductBalanceEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
