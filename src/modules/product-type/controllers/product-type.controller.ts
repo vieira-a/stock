@@ -49,6 +49,10 @@ export class ProductTypeController {
     @Param('id', ParseIntPipe) id: number,
     @Body() productTypeData: UpdateProductTypeDto,
   ) {
+    const productType = await this.service.readById(id);
+    if (!productType) {
+      throw new NotFoundException('Tipo de produto não encontrado');
+    }
     await this.service.update(id, productTypeData);
     return 'Tipo de produto atualizado com sucesso';
   }
