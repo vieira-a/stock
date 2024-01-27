@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -32,6 +33,11 @@ export class ProductTypeController {
   @HttpCode(200)
   @HttpCode(404)
   async readById(@Param('id', ParseIntPipe) id: number) {
-    return await this.service.readById(id);
+    const productType = await this.service.readById(id);
+
+    if (!productType) {
+      throw new NotFoundException('Tipo de produto não encontrado');
+    }
+    return productType;
   }
 }
