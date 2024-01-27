@@ -1,4 +1,3 @@
-import { ProductCategoryEntity } from 'src/modules/product-category/entities';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ProductCategoryEntity } from '../../../modules/product-category/entities';
 import { ProductTypeEntity } from '../../../modules/product-type/entities';
 import { ProductUnitEntity } from '../../../modules/product-unit/entities';
 
@@ -18,8 +18,11 @@ export class ProductEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'description', nullable: false })
-  description: string;
+  @ManyToOne(() => ProductCategoryEntity, (category) => category.products, {
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'category_id' })
+  category: ProductCategoryEntity;
 
   @ManyToOne(() => ProductTypeEntity, (type) => type.products, {
     onDelete: 'RESTRICT',
@@ -27,17 +30,14 @@ export class ProductEntity {
   @JoinColumn({ name: 'type_id' })
   type: ProductTypeEntity;
 
-  @ManyToOne(() => ProductCategoryEntity, (category) => category.products, {
-    onDelete: 'RESTRICT',
-  })
-  @JoinColumn({ name: 'category_id' })
-  category: ProductCategoryEntity;
-
   @ManyToOne(() => ProductUnitEntity, (unit) => unit.products, {
     onDelete: 'RESTRICT',
   })
-  @JoinColumn({ name: 'warehouse_id' })
+  @JoinColumn({ name: 'unit_id' })
   unit: ProductUnitEntity;
+
+  @Column({ name: 'description', nullable: false })
+  description: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
