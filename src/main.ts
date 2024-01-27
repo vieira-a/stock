@@ -1,10 +1,16 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './shared/exceptions/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const loggerInstance = app.get(Logger);
+  const httpAdapter = app.get(HttpAdapterHost);
+
+  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter, loggerInstance));
 
   app.useGlobalPipes(
     new ValidationPipe({
