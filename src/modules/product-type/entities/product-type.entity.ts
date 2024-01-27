@@ -15,7 +15,7 @@ export class ProductTypeEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'description', nullable: false })
+  @Column({ name: 'description', nullable: false, unique: true })
   description: string;
 
   @OneToMany(() => ProductEntity, (product) => product.type)
