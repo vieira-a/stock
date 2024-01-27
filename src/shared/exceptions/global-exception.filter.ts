@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Request } from 'express';
+import { QueryFailedError } from 'typeorm';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -22,19 +23,29 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
 
-    const httpStatus =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Internal Server Error';
+
+    exception instanceof HttpException
+      ? exception.getStatus()
+      : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    if (
+      exception instanceof QueryFailedError &&
+      exception.message.includes('unique constraint')
+    ) {
+      httpStatus = HttpStatus.CONFLICT;
+      message = 'Registro duplicado. O recurso já existe.';
+    }
 
     this.logger.error(
-      `${request.method} ${request.originalUrl} ${httpStatus} error: ${exception.message}`,
+      `${request.method} ${request.originalUrl} ${httpStatus} error: ${message}`,
     );
 
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toLocaleTimeString(),
-      message: exception.response.message,
+      message,
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
