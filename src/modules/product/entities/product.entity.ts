@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ProductBalanceEntity } from '../../../modules/product-balance/entities/product-balance.entity';
 import { ProductCategoryEntity } from '../../../modules/product-category/entities';
 import { ProductTypeEntity } from '../../../modules/product-type/entities';
 import { ProductUnitEntity } from '../../../modules/product-unit/entities';
@@ -35,6 +37,10 @@ export class ProductEntity {
   })
   @JoinColumn({ name: 'unit_id' })
   unit: ProductUnitEntity;
+
+  @OneToMany(() => ProductBalanceEntity, (balance) => balance.product)
+  @JoinColumn({ name: 'balance_id' })
+  balances: ProductBalanceEntity[];
 
   @Column({ name: 'description', nullable: false })
   description: string;
