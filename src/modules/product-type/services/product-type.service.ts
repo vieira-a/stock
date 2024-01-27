@@ -17,4 +17,8 @@ export class ProductTypeService {
   ): Promise<ProductTypeEntity> {
     return await this.repository.save(productTypeData);
   }
+
+  async readAll(): Promise<ProductTypeEntity[]> {
+    return await this.repository.find();
+  }
 }

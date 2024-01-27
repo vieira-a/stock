@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 
 import { CreateProductTypeDto } from '../dtos';
 import { ProductTypeService } from '../services';
@@ -12,5 +12,11 @@ export class ProductTypeController {
   async create(@Body() productTypeData: CreateProductTypeDto) {
     await this.service.create(productTypeData);
     return 'Tipo de produto registrado com sucesso';
+  }
+
+  @Get()
+  @HttpCode(200)
+  async readAll() {
+    return await this.service.readAll();
   }
 }
