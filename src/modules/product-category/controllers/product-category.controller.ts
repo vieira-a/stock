@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -41,5 +43,15 @@ export class ProductCategoryController {
   ) {
     await this.service.update(id, categoryData);
     return 'Categoria de produto atualizada com sucesso';
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    const categoryDeleted = await this.service.delete(id);
+    if (categoryDeleted.affected === 0) {
+      throw new NotFoundException('Categoria de produto não encontrada');
+    }
+    return 'Categoria de produto excluída com sucesso';
   }
 }
