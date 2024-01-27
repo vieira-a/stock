@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateProductTypeDto } from '../dtos';
+import { CreateProductTypeDto, UpdateProductTypeDto } from '../dtos';
 import { ProductTypeEntity } from '../entities';
 
 @Injectable()
@@ -24,5 +24,9 @@ export class ProductTypeService {
 
   async readById(id: number): Promise<ProductTypeEntity> {
     return await this.repository.findOne({ where: { id } });
+  }
+
+  async update(id: number, productTypeData: UpdateProductTypeDto) {
+    return await this.repository.update(id, productTypeData);
   }
 }

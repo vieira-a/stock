@@ -6,10 +6,11 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 
-import { CreateProductTypeDto } from '../dtos';
+import { CreateProductTypeDto, UpdateProductTypeDto } from '../dtos';
 import { ProductTypeService } from '../services';
 
 @Controller('product/type')
@@ -39,5 +40,16 @@ export class ProductTypeController {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
     return productType;
+  }
+
+  @Patch(':id')
+  @HttpCode(200)
+  @HttpCode(404)
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() productTypeData: UpdateProductTypeDto,
+  ) {
+    await this.service.update(id, productTypeData);
+    return 'Tipo de produto atualizado com sucesso';
   }
 }
