@@ -21,4 +21,8 @@ export class ProductCategoryService {
   async readAll(): Promise<ProductCategoryEntity[]> {
     return await this.repository.find();
   }
+
+  async readById(id: number): Promise<ProductCategoryEntity> {
+    return await this.repository.findOne({ where: { id } });
+  }
 }

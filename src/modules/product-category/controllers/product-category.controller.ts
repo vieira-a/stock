@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 
 import { CreateProductCategoryDto } from '../dtos';
 import { ProductCategoryService } from '../services';
@@ -17,5 +25,10 @@ export class ProductCategoryController {
   @HttpCode(200)
   async readAll() {
     return await this.service.readAll();
+  }
+
+  @Get(':id')
+  async readById(@Param('id', ParseIntPipe) id: number) {
+    return await this.service.readById(id);
   }
 }
