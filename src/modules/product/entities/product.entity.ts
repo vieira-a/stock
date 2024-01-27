@@ -1,5 +1,4 @@
 import { ProductCategoryEntity } from 'src/modules/product-category/entities';
-import { ProductWarehouseEntity } from 'src/modules/product-warehouse/entities';
 import {
   Column,
   CreateDateColumn,
@@ -12,7 +11,7 @@ import {
 } from 'typeorm';
 
 import { ProductTypeEntity } from '../../../modules/product-type/entities';
-import { Unit } from '../enums';
+import { ProductUnitEntity } from '../../../modules/product-unit/entities';
 
 @Entity('products')
 export class ProductEntity {
@@ -34,14 +33,11 @@ export class ProductEntity {
   @JoinColumn({ name: 'category_id' })
   category: ProductCategoryEntity;
 
-  @Column({ name: 'unit', nullable: false })
-  unit: Unit;
-
-  @ManyToOne(() => ProductWarehouseEntity, (warehouse) => warehouse.products, {
+  @ManyToOne(() => ProductUnitEntity, (unit) => unit.products, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'warehouse_id' })
-  warehouse: ProductWarehouseEntity;
+  unit: ProductUnitEntity;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
