@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -13,6 +12,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
+import {
+  createdSuccess,
+  deletedSuccess,
+  readSuccess,
+  updatedSuccess,
+} from '../../../shared/helpers/http-response';
 import { CreateProductTypeDto, UpdateProductTypeDto } from '../dtos';
 import { ProductTypeService } from '../services';
 
@@ -26,17 +31,13 @@ export class ProductTypeController {
     @Res() res: Response,
   ): Promise<Response> {
     await this.service.create(productTypeData);
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: 'Tipo de produto registrado com sucesso' });
+    return createdSuccess(res);
   }
 
   @Get()
   async readAll(@Res() res: Response): Promise<Response> {
     const productTypes = await this.service.readAll();
-    return res.status(HttpStatus.OK).json({
-      data: productTypes,
-    });
+    return readSuccess(res, productTypes);
   }
 
   @Get(':id')
@@ -49,9 +50,8 @@ export class ProductTypeController {
     if (!productType) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
-    return res.status(HttpStatus.OK).json({
-      data: productType,
-    });
+
+    return readSuccess(res, productType);
   }
 
   @Patch(':id')
@@ -61,13 +61,13 @@ export class ProductTypeController {
     @Res() res: Response,
   ): Promise<Response> {
     const productType = await this.service.readById(id);
+
     if (!productType) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
+
     await this.service.update(id, productTypeData);
-    return res
-      .status(HttpStatus.OK)
-      .json({ message: 'Tipo de produto atualizado com sucesso' });
+    return updatedSuccess(res);
   }
 
   @Delete(':id')
@@ -77,9 +77,8 @@ export class ProductTypeController {
     if (!productType) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
+
     await this.service.delete(id);
-    return res
-      .status(HttpStatus.OK)
-      .json({ message: 'Tipo de produto excluído com sucesso' });
+    return deletedSuccess(res);
   }
 }
