@@ -31,6 +31,6 @@ export class ProductCategoryService {
   }
 
   async delete(id: number) {
-    return this.repository.softDelete(id);
+    return await this.repository.softDelete(id);
   }
 }
