@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -12,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
+import { DataNotFoundException } from '../../../shared/exceptions';
 import {
   createdSuccess,
   deletedSuccess,
@@ -28,20 +28,33 @@ export class ProductCategoryController {
   async create(
     @Body() productCategoryData: CreateProductCategoryDto,
     @Res() res: Response,
-  ) {
+  ): Promise<Response> {
     await this.service.create(productCategoryData);
     return createdSuccess(res);
   }
 
   @Get()
-  async readAll(@Res() res: Response) {
+  async readAll(@Res() res: Response): Promise<Response> {
     const productCategories = await this.service.readAll();
+
+    if (productCategories.length === 0) {
+      throw new DataNotFoundException();
+    }
+
     return readSuccess(res, productCategories);
   }
 
   @Get(':id')
-  async readById(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+  async readById(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<Response> {
     const productCategory = await this.service.readById(id);
+
+    if (!productCategory) {
+      throw new DataNotFoundException();
+    }
+
     return readSuccess(res, productCategory);
   }
 
@@ -51,16 +64,28 @@ export class ProductCategoryController {
     @Body() categoryData: UpdateProductCategoryDto,
     @Res() res: Response,
   ) {
+    const productCategory = await this.service.readById(id);
+
+    if (!productCategory) {
+      throw new DataNotFoundException();
+    }
+
     await this.service.update(id, categoryData);
     return updatedSuccess(res);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
-    const categoryDeleted = await this.service.delete(id);
-    if (categoryDeleted.affected === 0) {
-      throw new NotFoundException('Categoria de produto não encontrada');
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const productCategory = await this.service.readById(id);
+
+    if (!productCategory) {
+      throw new DataNotFoundException();
     }
+
+    await this.service.delete(id);
     return deletedSuccess(res);
   }
 }
