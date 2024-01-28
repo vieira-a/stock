@@ -29,4 +29,8 @@ export class ProductTypeService {
   async update(id: number, productTypeData: UpdateProductTypeDto) {
     return await this.repository.update(id, productTypeData);
   }
+
+  async delete(id: number) {
+    return await this.repository.softDelete(id);
+  }
 }

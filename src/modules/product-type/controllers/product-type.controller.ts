@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   NotFoundException,
@@ -55,5 +56,13 @@ export class ProductTypeController {
     }
     await this.service.update(id, productTypeData);
     return 'Tipo de produto atualizado com sucesso';
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  @HttpCode(404)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    await this.service.delete(id);
+    return 'Tipo de produto excluído com sucesso';
   }
 }
