@@ -3,14 +3,21 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 
+import {
+  createdSuccess,
+  deletedSuccess,
+  readSuccess,
+  updatedSuccess,
+} from '../../../shared/helpers/http-response';
 import { CreateProductCategoryDto, UpdateProductCategoryDto } from '../dtos';
 import { ProductCategoryService } from '../services';
 
@@ -18,40 +25,42 @@ import { ProductCategoryService } from '../services';
 export class ProductCategoryController {
   constructor(private readonly service: ProductCategoryService) {}
   @Post()
-  @HttpCode(201)
-  async create(@Body() productCategoryData: CreateProductCategoryDto) {
+  async create(
+    @Body() productCategoryData: CreateProductCategoryDto,
+    @Res() res: Response,
+  ) {
     await this.service.create(productCategoryData);
-    return 'Categoria de produto registrada com sucesso';
+    return createdSuccess(res);
   }
 
   @Get()
-  @HttpCode(200)
-  async readAll() {
-    return await this.service.readAll();
+  async readAll(@Res() res: Response) {
+    const productCategories = await this.service.readAll();
+    return readSuccess(res, productCategories);
   }
 
   @Get(':id')
-  async readById(@Param('id', ParseIntPipe) id: number) {
-    return await this.service.readById(id);
+  async readById(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    const productCategory = await this.service.readById(id);
+    return readSuccess(res, productCategory);
   }
 
   @Patch(':id')
-  @HttpCode(200)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() categoryData: UpdateProductCategoryDto,
+    @Res() res: Response,
   ) {
     await this.service.update(id, categoryData);
-    return 'Categoria de produto atualizada com sucesso';
+    return updatedSuccess(res);
   }
 
   @Delete(':id')
-  @HttpCode(200)
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const categoryDeleted = await this.service.delete(id);
     if (categoryDeleted.affected === 0) {
       throw new NotFoundException('Categoria de produto não encontrada');
     }
-    return 'Categoria de produto excluída com sucesso';
+    return deletedSuccess(res);
   }
 }
