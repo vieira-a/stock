@@ -62,6 +62,11 @@ export class ProductTypeController {
   @HttpCode(200)
   @HttpCode(404)
   async delete(@Param('id', ParseIntPipe) id: number) {
+    const productType = await this.service.readById(id);
+
+    if (!productType) {
+      throw new NotFoundException('Tipo de produto não encontrado');
+    }
     await this.service.delete(id);
     return 'Tipo de produto excluído com sucesso';
   }
