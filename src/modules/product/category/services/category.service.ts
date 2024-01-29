@@ -12,10 +12,8 @@ export class CategoryService {
     private readonly repository: Repository<CategoryEntity>,
   ) {}
 
-  async create(
-    productCategoryData: CreateCategoryDto,
-  ): Promise<CategoryEntity> {
-    return await this.repository.save(productCategoryData);
+  async create(categoryData: CreateCategoryDto): Promise<CategoryEntity> {
+    return await this.repository.save(categoryData);
   }
 
   async readAll(): Promise<CategoryEntity[]> {
