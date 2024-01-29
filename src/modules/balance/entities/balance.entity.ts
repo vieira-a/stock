@@ -9,19 +9,18 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ProductWarehouseEntity } from '../../../modules/product-warehouse/entities';
-import { ProductEntity } from '../../../modules/product/entities';
+import { ProductEntity, WarehouseEntity } from '../../product/entities';
 
 @Entity('product_balances')
-export class ProductBalanceEntity {
+export class BalanceEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => ProductWarehouseEntity, (warehouse) => warehouse.balances, {
+  @ManyToOne(() => WarehouseEntity, (warehouse) => warehouse.balances, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'warehouse_id' })
-  warehouse: ProductWarehouseEntity;
+  warehouse: WarehouseEntity;
 
   @ManyToOne(() => ProductEntity, (product) => product.balances, {
     onDelete: 'RESTRICT',
