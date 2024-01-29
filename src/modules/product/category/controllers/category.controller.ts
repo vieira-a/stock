@@ -11,22 +11,22 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
-import { DataNotFoundException } from '../../../shared/exceptions';
+import { DataNotFoundException } from '../../../../shared/exceptions';
 import {
   createdSuccess,
   deletedSuccess,
   readSuccess,
   updatedSuccess,
-} from '../../../shared/helpers/http-response';
-import { CreateProductCategoryDto, UpdateProductCategoryDto } from '../dtos';
-import { ProductCategoryService } from '../services';
+} from '../../../../shared/helpers/http-response';
+import { CreateCategoryDto, UpdateCategoryDto } from '../../dtos';
+import { CategoryService } from '../services';
 
 @Controller('product/category')
-export class ProductCategoryController {
-  constructor(private readonly service: ProductCategoryService) {}
+export class CategoryController {
+  constructor(private readonly service: CategoryService) {}
   @Post()
   async create(
-    @Body() productCategoryData: CreateProductCategoryDto,
+    @Body() productCategoryData: CreateCategoryDto,
     @Res() res: Response,
   ): Promise<Response> {
     await this.service.create(productCategoryData);
@@ -35,13 +35,13 @@ export class ProductCategoryController {
 
   @Get()
   async readAll(@Res() res: Response): Promise<Response> {
-    const productCategories = await this.service.readAll();
+    const categories = await this.service.readAll();
 
-    if (productCategories.length === 0) {
+    if (categories.length === 0) {
       throw new DataNotFoundException();
     }
 
-    return readSuccess(res, productCategories);
+    return readSuccess(res, categories);
   }
 
   @Get(':id')
@@ -49,24 +49,24 @@ export class ProductCategoryController {
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,
   ): Promise<Response> {
-    const productCategory = await this.service.readById(id);
+    const category = await this.service.readById(id);
 
-    if (!productCategory) {
+    if (!category) {
       throw new DataNotFoundException();
     }
 
-    return readSuccess(res, productCategory);
+    return readSuccess(res, category);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() categoryData: UpdateProductCategoryDto,
+    @Body() categoryData: UpdateCategoryDto,
     @Res() res: Response,
   ) {
-    const productCategory = await this.service.readById(id);
+    const category = await this.service.readById(id);
 
-    if (!productCategory) {
+    if (!category) {
       throw new DataNotFoundException();
     }
 
@@ -79,9 +79,9 @@ export class ProductCategoryController {
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,
   ): Promise<Response> {
-    const productCategory = await this.service.readById(id);
+    const category = await this.service.readById(id);
 
-    if (!productCategory) {
+    if (!category) {
       throw new DataNotFoundException();
     }
 

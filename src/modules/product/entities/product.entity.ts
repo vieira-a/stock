@@ -11,20 +11,20 @@ import {
 } from 'typeorm';
 
 import { ProductBalanceEntity } from '../../../modules/product-balance/entities/product-balance.entity';
-import { ProductCategoryEntity } from '../../../modules/product-category/entities';
 import { ProductTypeEntity } from '../../../modules/product-type/entities';
 import { ProductUnitEntity } from '../../../modules/product-unit/entities';
+import { CategoryEntity } from '../entities';
 
 @Entity('products')
 export class ProductEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => ProductCategoryEntity, (category) => category.products, {
+  @ManyToOne(() => CategoryEntity, (category) => category.products, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'category_id' })
-  category: ProductCategoryEntity;
+  category: CategoryEntity;
 
   @ManyToOne(() => ProductTypeEntity, (type) => type.products, {
     onDelete: 'RESTRICT',
