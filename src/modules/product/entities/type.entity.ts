@@ -8,10 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ProductEntity } from '../../../modules/product/entities';
+import { ProductEntity } from '../../product/entities';
 
 @Entity('product_types')
-export class ProductTypeEntity {
+export class TypeEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

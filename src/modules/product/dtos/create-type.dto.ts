@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateProductTypeDto {
+export class CreateTypeDto {
   @IsNotEmpty({ message: 'Descrição é obrigatória ' })
   description: string;
 }

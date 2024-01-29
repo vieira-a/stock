@@ -17,27 +17,27 @@ import {
   deletedSuccess,
   readSuccess,
   updatedSuccess,
-} from '../../../shared/helpers/http-response';
-import { CreateProductTypeDto, UpdateProductTypeDto } from '../dtos';
-import { ProductTypeService } from '../services';
+} from '../../../../shared/helpers/http-response';
+import { CreateTypeDto, UpdateTypeDto } from '../../dtos';
+import { TypeService } from '../services';
 
 @Controller('product/type')
-export class ProductTypeController {
-  constructor(private readonly service: ProductTypeService) {}
+export class TypeController {
+  constructor(private readonly service: TypeService) {}
 
   @Post()
   async create(
-    @Body() productTypeData: CreateProductTypeDto,
+    @Body() typeData: CreateTypeDto,
     @Res() res: Response,
   ): Promise<Response> {
-    await this.service.create(productTypeData);
+    await this.service.create(typeData);
     return createdSuccess(res);
   }
 
   @Get()
   async readAll(@Res() res: Response): Promise<Response> {
-    const productTypes = await this.service.readAll();
-    return readSuccess(res, productTypes);
+    const types = await this.service.readAll();
+    return readSuccess(res, types);
   }
 
   @Get(':id')
@@ -45,36 +45,36 @@ export class ProductTypeController {
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,
   ): Promise<Response> {
-    const productType = await this.service.readById(id);
+    const type = await this.service.readById(id);
 
-    if (!productType) {
+    if (!type) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
 
-    return readSuccess(res, productType);
+    return readSuccess(res, type);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() productTypeData: UpdateProductTypeDto,
+    @Body() typeData: UpdateTypeDto,
     @Res() res: Response,
   ): Promise<Response> {
-    const productType = await this.service.readById(id);
+    const type = await this.service.readById(id);
 
-    if (!productType) {
+    if (!type) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
 
-    await this.service.update(id, productTypeData);
+    await this.service.update(id, typeData);
     return updatedSuccess(res);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
-    const productType = await this.service.readById(id);
+    const type = await this.service.readById(id);
 
-    if (!productType) {
+    if (!type) {
       throw new NotFoundException('Tipo de produto não encontrado');
     }
 

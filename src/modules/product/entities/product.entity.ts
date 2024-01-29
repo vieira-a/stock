@@ -11,9 +11,8 @@ import {
 } from 'typeorm';
 
 import { ProductBalanceEntity } from '../../../modules/product-balance/entities/product-balance.entity';
-import { ProductTypeEntity } from '../../../modules/product-type/entities';
 import { ProductUnitEntity } from '../../../modules/product-unit/entities';
-import { CategoryEntity } from '../entities';
+import { CategoryEntity, TypeEntity } from '../entities';
 
 @Entity('products')
 export class ProductEntity {
@@ -26,11 +25,11 @@ export class ProductEntity {
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
 
-  @ManyToOne(() => ProductTypeEntity, (type) => type.products, {
+  @ManyToOne(() => TypeEntity, (type) => type.products, {
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'type_id' })
-  type: ProductTypeEntity;
+  type: TypeEntity;
 
   @ManyToOne(() => ProductUnitEntity, (unit) => unit.products, {
     onDelete: 'RESTRICT',
