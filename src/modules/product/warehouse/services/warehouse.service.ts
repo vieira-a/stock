@@ -19,4 +19,8 @@ export class WarehouseService {
   async readAll(): Promise<WarehouseEntity[]> {
     return await this.repository.find();
   }
+
+  async readById(id: number): Promise<WarehouseEntity> {
+    return await this.repository.findOne({ where: { id } });
+  }
 }
