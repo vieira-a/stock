@@ -15,4 +15,8 @@ export class UnitService {
   async create(unitData: CreateUnitDto): Promise<UnitEntity> {
     return await this.repository.save(unitData);
   }
+
+  async readAll(): Promise<UnitEntity[]> {
+    return await this.repository.find();
+  }
 }

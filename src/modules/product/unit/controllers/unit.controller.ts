@@ -1,7 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { createdSuccess } from '../../../../shared/helpers/http-response';
+import { DataNotFoundException } from '../../../../shared/exceptions';
+import {
+  createdSuccess,
+  readSuccess,
+} from '../../../../shared/helpers/http-response';
 import { CreateUnitDto } from '../../dtos';
 import { UnitService } from '../services';
 
@@ -20,5 +24,16 @@ export class UnitController {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @Get()
+  async readAll(@Res() res: Response): Promise<Response> {
+    const units = await this.service.readAll();
+
+    if (units.length === 0) {
+      throw new DataNotFoundException();
+    }
+
+    return readSuccess(res, units);
   }
 }
