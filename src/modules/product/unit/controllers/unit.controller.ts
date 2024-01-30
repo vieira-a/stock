@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 
 import { DataNotFoundException } from '../../../../shared/exceptions';
@@ -35,5 +43,19 @@ export class UnitController {
     }
 
     return readSuccess(res, units);
+  }
+
+  @Get(':id')
+  async readById(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const unit = await this.service.readById(id);
+
+    if (!unit) {
+      throw new DataNotFoundException();
+    }
+
+    return readSuccess(res, unit);
   }
 }
