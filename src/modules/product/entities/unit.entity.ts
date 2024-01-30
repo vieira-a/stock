@@ -15,23 +15,14 @@ export class UnitEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'acronym', nullable: false, length: 10 })
+  @Column({ name: 'acronym', nullable: false, length: 2, unique: true })
   acronym: string;
 
-  @Column({ name: 'description', nullable: false, length: 60 })
+  @Column({ name: 'description', nullable: false, length: 60, unique: true })
   description: string;
 
   @OneToMany(() => ProductEntity, (product) => product.unit)
   products: ProductEntity[];
-
-  @Column({ name: 'email_creation', length: 255 })
-  emailCreation: string;
-
-  @Column({ name: 'email_update', length: 255 })
-  emailUpdate: string;
-
-  @Column({ name: 'email_delete', length: 255 })
-  emailDelete: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
