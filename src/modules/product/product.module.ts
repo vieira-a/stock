@@ -6,6 +6,7 @@ import { CategoryModule } from './category/category.module';
 import { ProductEntity } from './entities';
 import { TypeModule } from './type/type.module';
 import { UnitModule } from './unit/unit.module';
+import { WarehouseModule } from './warehouse/warehouse.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UnitModule } from './unit/unit.module';
     TypeModule,
     UnitModule,
     BalanceModule,
+    WarehouseModule,
   ],
 })
 export class ProductModule {}
