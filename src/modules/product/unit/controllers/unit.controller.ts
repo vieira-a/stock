@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Res,
 } from '@nestjs/common';
@@ -13,8 +14,9 @@ import { DataNotFoundException } from '../../../../shared/exceptions';
 import {
   createdSuccess,
   readSuccess,
+  updatedSuccess,
 } from '../../../../shared/helpers/http-response';
-import { CreateUnitDto } from '../../dtos';
+import { CreateUnitDto, UpdateUnitDto } from '../../dtos';
 import { UnitService } from '../services';
 
 @Controller('product/unit')
@@ -57,5 +59,21 @@ export class UnitController {
     }
 
     return readSuccess(res, unit);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() unitData: UpdateUnitDto,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const unit = await this.service.readById(id);
+
+    if (!unit) {
+      throw new DataNotFoundException();
+    }
+
+    await this.service.update(unit.id, unitData);
+    return updatedSuccess(res);
   }
 }

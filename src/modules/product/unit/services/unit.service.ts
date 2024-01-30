@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateUnitDto } from '../../dtos';
+import { CreateUnitDto, UpdateUnitDto } from '../../dtos';
 import { UnitEntity } from '../../entities';
 
 @Injectable()
@@ -22,5 +22,9 @@ export class UnitService {
 
   async readById(id: number): Promise<UnitEntity> {
     return await this.repository.findOne({ where: { id } });
+  }
+
+  async update(id: number, unitData: UpdateUnitDto) {
+    return await this.repository.update(id, unitData);
   }
 }
