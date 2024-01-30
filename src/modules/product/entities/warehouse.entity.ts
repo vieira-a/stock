@@ -15,7 +15,7 @@ export class WarehouseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'description', nullable: false })
+  @Column({ name: 'description', nullable: false, unique: true })
   description: string;
 
   @OneToMany(() => BalanceEntity, (balance) => balance.warehouse)
