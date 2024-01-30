@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ProductBalanceModule } from '../product-balance/product-balance.module';
-import { ProductCategoryModule } from '../product-category/product-category.module';
-import { ProductTypeModule } from '../product-type/product-type.module';
-import { ProductUnitModule } from '../product-unit/product-unit.module';
+import { BalanceModule } from '../balance/balance.module';
+import { CategoryModule } from './category/category.module';
 import { ProductEntity } from './entities';
+import { TypeModule } from './type/type.module';
+import { UnitModule } from './unit/unit.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProductEntity]),
-    ProductCategoryModule,
-    ProductTypeModule,
-    ProductUnitModule,
-    ProductBalanceModule,
+    CategoryModule,
+    TypeModule,
+    UnitModule,
+    BalanceModule,
   ],
 })
 export class ProductModule {}
