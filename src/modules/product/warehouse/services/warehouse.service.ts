@@ -27,4 +27,8 @@ export class WarehouseService {
   async update(id: number, warehouseData: UpdateWarehouseDto) {
     return await this.repository.update(id, warehouseData);
   }
+
+  async delete(id: number) {
+    return await this.repository.softDelete(id);
+  }
 }
