@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Res,
 } from '@nestjs/common';
@@ -13,8 +14,9 @@ import { DataNotFoundException } from '../../../../shared/exceptions';
 import {
   createdSuccess,
   readSuccess,
+  updatedSuccess,
 } from '../../../../shared/helpers/http-response';
-import { CreateWarehouseDto } from '../../dtos';
+import { CreateWarehouseDto, UpdateWarehouseDto } from '../../dtos';
 import { WarehouseService } from '../services/warehouse.service';
 
 @Controller('product/warehouse')
@@ -52,5 +54,21 @@ export class WarehouseController {
     }
 
     return readSuccess(res, warehouse);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() warehouseData: UpdateWarehouseDto,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const warehouse = await this.service.readById(id);
+
+    if (!warehouse) {
+      throw new DataNotFoundException();
+    }
+
+    await this.service.update(warehouse.id, warehouseData);
+    return updatedSuccess(res);
   }
 }

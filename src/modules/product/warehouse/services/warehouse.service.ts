@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateWarehouseDto } from '../../dtos';
+import { CreateWarehouseDto, UpdateWarehouseDto } from '../../dtos';
 import { WarehouseEntity } from '../../entities';
 
 @Injectable()
@@ -22,5 +22,9 @@ export class WarehouseService {
 
   async readById(id: number): Promise<WarehouseEntity> {
     return await this.repository.findOne({ where: { id } });
+  }
+
+  async update(id: number, warehouseData: UpdateWarehouseDto) {
+    return await this.repository.update(id, warehouseData);
   }
 }
