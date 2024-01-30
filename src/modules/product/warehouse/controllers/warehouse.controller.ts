@@ -1,7 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { createdSuccess } from '../../../../shared/helpers/http-response';
+import { DataNotFoundException } from '../../../../shared/exceptions';
+import {
+  createdSuccess,
+  readSuccess,
+} from '../../../../shared/helpers/http-response';
 import { CreateWarehouseDto } from '../../dtos';
 import { WarehouseService } from '../services/warehouse.service';
 
@@ -12,8 +16,19 @@ export class WarehouseController {
   async create(
     @Body() warehouseData: CreateWarehouseDto,
     @Res() res: Response,
-  ) {
+  ): Promise<Response> {
     await this.service.create(warehouseData);
     return createdSuccess(res);
+  }
+
+  @Get()
+  async readAll(@Res() res: Response): Promise<Response> {
+    const warehouses = await this.service.readAll();
+
+    if (warehouses.length === 0) {
+      throw new DataNotFoundException();
+    }
+
+    return readSuccess(res, warehouses);
   }
 }

@@ -15,4 +15,8 @@ export class WarehouseService {
   async create(warehouseData: CreateWarehouseDto): Promise<WarehouseEntity> {
     return await this.repository.save(warehouseData);
   }
+
+  async readAll(): Promise<WarehouseEntity[]> {
+    return await this.repository.find();
+  }
 }
