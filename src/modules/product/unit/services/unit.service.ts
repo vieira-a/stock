@@ -27,4 +27,8 @@ export class UnitService {
   async update(id: number, unitData: UpdateUnitDto) {
     return await this.repository.update(id, unitData);
   }
+
+  async delete(id: number) {
+    return await this.repository.softDelete(id);
+  }
 }

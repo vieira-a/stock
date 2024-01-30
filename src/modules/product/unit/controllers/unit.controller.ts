@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -13,6 +14,7 @@ import { Response } from 'express';
 import { DataNotFoundException } from '../../../../shared/exceptions';
 import {
   createdSuccess,
+  deletedSuccess,
   readSuccess,
   updatedSuccess,
 } from '../../../../shared/helpers/http-response';
@@ -75,5 +77,20 @@ export class UnitController {
 
     await this.service.update(unit.id, unitData);
     return updatedSuccess(res);
+  }
+
+  @Delete(':id')
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const unit = await this.service.readById(id);
+
+    if (!unit) {
+      throw new DataNotFoundException();
+    }
+
+    await this.service.delete(unit.id);
+    return deletedSuccess(res);
   }
 }
